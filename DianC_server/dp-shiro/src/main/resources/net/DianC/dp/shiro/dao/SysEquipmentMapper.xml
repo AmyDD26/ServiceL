@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysEquipmentMapper">
+
+	<select id="listForPage" resultType="SysEquipmentEntity">
+		SELECT
+		e.id,
+		e.name,
+		e.description,
+		e.tagID,
+		e.groupID,
+		e.status,
+		e.inTime,
+
+		e.lat,
+		e.lon
+
+
+		FROM
+		e_equipment e
+		WHERE
+		e.groupID = #{groupId}
+		ORDER BY
+		e.id ASC
+	</select>
+
+	<insert id="save">
+		INSERT INTO e_equipment (
+		name,
+		description,
+		groupID,
+
+		tagID,
+		status,
+		inTime,
+		lat,
+		lon
+		)
+		VALUES (
+		#{name},
+		#{description},
+		#{groupID},
+
+		#{tagID},
+		#{status},
+		#{inTime},
+		<!--  NOW(),-->
+		#{lat},
+		#{lon}
+		)
+	</insert>
+
+	<select id="getObjectById" resultType="SysEquipmentEntity">
+		SELECT
+		ee.id,
+		ee.name,
+		ee.description,
+		ee.tagID,
+		ee.groupID,
+		ee.status,
+		ee.inTime,
+		ee.lat,
+		ee.lon
+
+		FROM
+		e_equipment ee
+		WHERE
+		id = #{value}
+	</select>
+
+	<update id="update">
+		UPDATE e_equipment
+		<set>
+			<if test="name != null">name = #{name}, </if>
+			<if test="description != null">description = #{description}, </if>
+			<if test="tagID != null">tagID = #{tagID}, </if>
+			<if test="groupID != null">groupID = #{groupID}, </if>
+			<if test="status != null">status = #{status} ,</if>
+			<if test="inTime != null">inTime = #{inTime}, </if>
+			<if test="lat != null">lat = #{lat} ,</if>
+			<if test="lon != null">lon = #{lon} </if>
+
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="batchRemove">
+		DELETE
+		FROM
+		e_equipment
+		WHERE
+		id IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

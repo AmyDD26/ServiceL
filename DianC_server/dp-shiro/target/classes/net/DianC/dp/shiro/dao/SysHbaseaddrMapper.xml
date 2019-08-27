@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysHbaseaddrMapper">
+	
+	<select id="listForPage" resultType="SysHbaseaddrEntity">
+		SELECT
+			`id`, 
+			`hbaseType`,
+			`hbaseAddress`,
+			`hbasePort`
+		FROM
+			d_hbaseaddr
+		ORDER BY
+			id ASC
+	</select>
+	
+	<insert id="save">
+		INSERT INTO d_hbaseaddr (
+			`hbaseType`,
+			`hbaseAddress`,
+			`hbasePort`
+		)
+		VALUES (
+			#{hbaseType},
+			#{hbaseAddress},
+			#{hbasePort}
+		)
+	</insert>
+	
+	<select id="getObjectById" resultType="SysHbaseaddrEntity">
+		SELECT
+			`id`, 
+			`hbaseType`,
+			`hbaseAddress`,
+			`hbasePort`
+		FROM
+			d_hbaseaddr
+		WHERE
+			id = #{id}
+	</select>
+	
+	<update id="update">
+		UPDATE d_hbaseaddr
+	 	<set>
+	 		<if test="hbaseType != null">`hbaseType` = #{hbaseType},</if>
+			<if test="hbaseAddress != null">`hbaseAddress` = #{hbaseAddress},</if>
+			<if test="hbasePort != null">`hbasePort` = #{hbasePort}</if>
+		</set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<delete id="batchRemove">
+		DELETE
+		FROM
+			d_hbaseaddr
+		WHERE
+			id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="getItemByhbaseType" resultType="SysHbaseaddrEntity">
+		SELECT
+			`id`, 
+			`hbaseType`,
+			`hbaseAddress`,
+			`hbasePort`
+		FROM
+			d_hbaseaddr
+		WHERE
+			`hbaseType` = #{hbaseType}
+	</select>
+
+</mapper>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysDbinfoncMapper">
+	
+	<select id="listForPage" resultType="SysDbinfoncEntity">
+		SELECT
+			t.name,
+			t.count,
+			t.isRecevie,
+			t.tableInfoID,
+			t.status
+			
+		FROM
+			t_tablerecord t
+		WHERE
+			t.dbID=#{dbinfoId}
+		ORDER BY
+			t.id ASC
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_tablerecord (
+			name,
+			count
+		)
+		VALUES (
+			#{name},
+			#{count}
+		)
+	</insert>
+	
+	<select id="getObjectById" resultType="SysDbinfoncEntity">
+		SELECT
+			t.name,
+			t.count
+		
+			FROM
+			t_tablerecord t
+		WHERE
+			id = #{value}
+	</select>
+	
+	<update id="update">
+		UPDATE t_tablerecord
+		<set> 
+			<if test="name != null">name = #{name}, </if>
+			<if test="count != null">count = #{count} </if>
+			
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="batchRemove">
+		DELETE
+		FROM
+			t_tablerecord
+		WHERE
+			id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	
+	<delete id="remove_TableRecord">
+		DELETE
+		FROM
+			t_tablerecord
+		WHERE
+			tableInfoID IN
+		<foreach item="tableInfoID" collection="array" open="(" separator="," close=")">
+			#{tableInfoID}
+		</foreach>
+	</delete>
+	
+	<!--
+	<delete id="idRemove">
+		DELETE
+		FROM
+			t_tablerecord t
+		WHERE
+			tableInfoID =  #{tableInfoID}
+		
+	</delete>
+	-->
+	<select id="getdbName" resultType="String">
+		SELECT
+			d.dbName		
+		FROM
+			d_dbinfo d
+		WHERE
+			d.id = (
+			SELECT
+				t.dbID
+			FROM
+				t_tableinfo t
+			WHERE
+				t.id = #{tableInfoId}
+			)
+	</select>
+	
+	<select id="getItemByhbaseType" resultType="SysHbaseaddrEntity">
+		SELECT
+			`id`, 
+			`hbaseType`,
+			`hbaseAddress`,
+			`hbasePort`
+		FROM
+			d_hbaseaddr
+		WHERE
+			`hbaseType` = #{hbaseType}
+	</select>
+
+	<select id="getIsRecevie" resultType="int">
+		SELECT
+			t.isRecevie			
+		FROM
+			t_tablerecord t
+		WHERE
+			t.tableInfoID=#{tableInfoId}
+	</select>
+	<!--  add status 事件 -->
+	<select id="getStatus" resultType="int">
+		SELECT
+			t.status			
+		FROM
+			t_tablerecord t
+		WHERE
+			t.tableInfoID=#{tableInfoId}
+	</select>
+	
+	<update id="updateIsRecevie">
+		UPDATE t_tablerecord t
+		<set> 
+			t.isRecevie = #{1}		
+		</set>
+		where t.tableInfoID=#{0}
+	</update>
+</mapper>

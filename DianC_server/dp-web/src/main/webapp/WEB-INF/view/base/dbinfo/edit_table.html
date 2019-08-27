@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>创建表</title>
+<link rel="stylesheet" href="${rc.contextPath}/statics/css/bootstrap.min.css">
+<script src="${rc.contextPath}/statics/libs/jquery.min.js"></script>
+<script src="${rc.contextPath}/statics/libs/bootstrap.min.js"></script>
+#parse("include/header.html")
+</head>
+<body>
+<div id="dpLTE" class="container-fluid" v-cloak>
+	<div class="row">
+		<div class="col-md-2 no-padding">
+			<div class="panel panel-default">
+				<div class="panel-heading">数据表目录</div>
+				<div class="panel-body" id="treePanel" style="overflow: auto;">
+					<ul id="orgTree" class="ztree"></ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-10 no-padding">
+			<div class="panel panel-default">
+				<div class="panel-heading">数据表结构</div>
+				<div class="panel-body">
+					<div class="row">
+		                 <div class="col-md-6">
+			                 <div class="btn-toolbar">
+				                 <div class="btn-group">
+				                 	<a class="btn btn-default" @click="table_create">&nbsp;创建新表</a>
+									<a class="btn btn-default" @click="tablestructure_load();">&nbsp;刷新</a>
+									<a class="btn btn-default" @click="tablestructure_save">&nbsp;新增字段</a>
+									<a class="btn btn-default" @click="tablestructure_edit">&nbsp;编辑字段</a>
+									<a class="btn btn-default" @click="tablestructure_remove">&nbsp;删除字段</a>									
+								</div>
+							 </div>
+						</div>
+			        </div>
+			        <div class="row">
+			        	<table id="dataGrid_tableconstructor"></table>
+			        </div>
+		        </div>         				                 	
+			</div>
+		</div>
+    </div>
+</div>
+#parse("include/footer.html")
+<script src="${rc.contextPath}/statics/js/base/dbinfo/edit_table.js?_${date.systemTime}"></script>
+</body>
+</html>

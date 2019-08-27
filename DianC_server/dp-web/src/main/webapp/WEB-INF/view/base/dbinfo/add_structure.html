@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>新增-表结构</title>
+#parse("include/header.html")
+</head>
+<body>
+	<div id="dpLTE" class="container-fluid" v-cloak>
+		<table class="form" id="form">
+        	<tr>
+	            <td class="formTitle">字段名称<font face="宋体">*</font></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" v-model="tablestructure.name" placeholder="字段名称" isvalid="yes" checkexpession="NotNull"/>
+				</td>
+        	</tr>
+	        <tr>	            
+ 			<td class="formTitle">是否为主键<font face="宋体">*</font></td>
+	            <td class="formValue">
+					<!-- <input type="text" class="form-control" v-model="tablestructure.isKey" placeholder="是否为主键" checkexpession="NotNull"/> -->
+					<select class="form-control selectisKey" v-model="selectedisKey">
+						<option v-for="item in isKeylist" v-bind:value="item.id">{{item.name}}</option>
+					</select>					
+				</td>
+	        </tr>         	
+         	<tr>
+	            <td class="formTitle">字段类型<font face="宋体"></font></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" v-model="tablestructure.fieldType" placeholder="字段类型"/>
+				</td>
+	        </tr>
+	        <tr>
+	            <td class="formTitle">默认值<font face="宋体"></font></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" v-model="tablestructure.defaultValue" placeholder="默认值"/>
+				</td>
+	        </tr>
+	        <tr>
+	            <td class="formTitle">字段中文名<font face="宋体"></font></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" v-model="tablestructure.chName" placeholder="字段中文名"/>
+				</td>
+	        </tr>
+	        <tr>
+	            <td class="formTitle">字段长度<font face="宋体"></font></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" v-model="tablestructure.length" placeholder="字段长度"/>
+				</td>
+	        </tr>
+	        <tr>
+	            <td class="formTitle">是否可以为空<font face="宋体"></font></td>
+	            <td class="formValue">
+					<!-- <input type="text" class="form-control" v-model="tablestructure.isNull" placeholder="是否可以为空"/> -->
+					<select class="form-control selectisNull" v-model="selectedisNull">
+						<option v-for="item in isNulllist" v-bind:value="item.id">{{item.name}}</option>
+					</select>
+				</td>
+	        </tr>
+        	
+		</table>
+	</div>
+	#parse("include/footer.html")
+	<script
+		src="${rc.contextPath}/statics/js/base/dbinfo/add_tablestructure.js?_${date.systemTime}"></script>
+</body>
+</html>

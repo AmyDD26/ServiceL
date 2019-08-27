@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dp-base/dp-base.iml" filepath="$PROJECT_DIR$/dp-base/dp-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-common/dp-common.iml" filepath="$PROJECT_DIR$/dp-common/dp-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-generator/dp-generator.iml" filepath="$PROJECT_DIR$/dp-generator/dp-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-orm/dp-orm.iml" filepath="$PROJECT_DIR$/dp-orm/dp-orm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-pro.iml" filepath="$PROJECT_DIR$/dp-pro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-quartz/dp-quartz.iml" filepath="$PROJECT_DIR$/dp-quartz/dp-quartz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-shiro/dp-shiro.iml" filepath="$PROJECT_DIR$/dp-shiro/dp-shiro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-web/dp-web.iml" filepath="$PROJECT_DIR$/dp-web/dp-web.iml" />
+    </modules>
+  </component>
+</project>

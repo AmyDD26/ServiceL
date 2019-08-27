@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysWrapperMapper">
+
+	<select id="list" resultType="SysWrapperEntity">
+		SELECT
+		dw.id,
+		dw.name
+		FROM
+		e_datawrapper dw
+		ORDER BY
+		dw.id ASC
+	</select>
+
+	<insert id="save">
+		INSERT INTO e_datawrapper (
+		name
+		)
+		VALUES (
+		#{name}
+		)
+	</insert>
+
+	<select id="getObjectById" resultType="SysEquipmentGroupEntity">
+		SELECT
+		e.id,
+		e.userID,
+		e.creater,
+		e.publishTime,
+		e.name,
+		e.description,
+		e.registerCode,
+		e.protocol,
+		e.saveTag,
+		e.dataSetID,
+		e.msServer,
+		e.dataWrapperID
+		FROM
+		e_equipmentgroup e
+		WHERE
+		id = #{value}
+	</select>
+
+	<update id="update">
+		UPDATE e_equipmentgroup
+		<set>
+			<if test="userID != null">userID = #{userID}, </if>
+			<if test="creater != null">creater = #{creater}, </if>
+			<if test="publishTime != null">publishTime = #{publishTime}, </if>
+			<if test="name != null">name = #{name}, </if>
+			<if test="description != null">description = #{description}, </if>
+			<if test="registerCode != null">registerCode = #{registerCode}, </if>
+			<if test="protocol != null">protocol = #{protocol}, </if>
+			<if test="saveTag != null">saveTag = #{saveTag}, </if>
+			<if test="dataSetID != null">dataSetID = #{dataSetID}, </if>
+			<if test="msServer != null">msServer = #{msServer}, </if>
+			<if test="dataWrapperID != null">dataWrapperID = #{dataWrapperID}, </if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="batchRemove">
+		DELETE
+		FROM
+		e_equipmentgroup
+		WHERE
+		id IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

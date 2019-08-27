@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="${rc.contextPath}/statics/css/bootstrap.min.css">
+	<script src="${rc.contextPath}/statics/libs/jquery.min.js"></script>
+	<script src="${rc.contextPath}/statics/libs/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="${rc.contextPath}/statics/plugins/fileinput/fileinput.min.css">
+    <script src="${rc.contextPath}/statics/plugins/fileinput/fileinput.min.js"></script>
+	<script src="${rc.contextPath}/statics/plugins/fileinput/fileinput_locale_zh.js"></script>
+	<script src="${rc.contextPath}/statics/js/base/equipment/wrapper/add.js"></script>
+	
+	
+	
+<title>新增-封装器</title>
+#parse("include/header.html")
+</head>
+<body>
+	<div id="dpLTE" class="container-fluid" v-cloak>
+		<table class="form" id="form">
+	        	<tr>
+		            <td class="formTitle">封装器名称<font face="宋体">*</font></td>
+		            <td class="formValue">
+						<input type="text" class="form-control" v-model="wrapper.name" placeholder="封装器名称" isvalid="yes" checkexpession="NotNull"/>
+					</td>				
+	        	</tr>	        		        		        	    		        	       	
+		</table>                 
+         </div>  
+         <hr>	
+         <div  class="container-fluid" >	
+		<table class="form" id="form">	        		        	
+	        	<tr>	        	
+	        	<td class="formTitle">封装器jar包<font face="宋体">*</font></td>					                   
+                <td>
+                <input id="file-fr" name="file" type="file" class="file" uploadUrl='../../../sys/wrapper/upload3?_' + $.now()>                                         
+                </td>                            	                      	
+	        	</tr>        	
+		 </table>	
+		 </div>  
+	<script>
+    
+	$('#file-fr').fileinput({
+    language: 'zh',
+    uploadUrl: '../../../sys/wrapper/jar_upload?_' + $.now(),   
+ 	showPreview: false,
+ 	allowedFileExtensions: ['jar'],//接收的文件后缀
+	});
+			
+    </script>
+	
+	#parse("include/footer.html")
+	<script
+		src="${rc.contextPath}/statics/js/base/equipment/wrapper/add.js?_${date.systemTime}"></script>
+</body>
+</html>

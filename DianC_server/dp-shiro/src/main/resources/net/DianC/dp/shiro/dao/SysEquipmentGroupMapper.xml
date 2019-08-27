@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysEquipmentGroupMapper">
+
+	<select id="listForPage" resultType="SysEquipmentGroupEntity">
+		SELECT
+		e.id,
+		e.name,
+		e.description,
+		e.org_id,
+		protocol,
+		(
+		SELECT
+		ds.chName
+		FROM
+		d_dbinfo as ds
+		WHERE
+		ds.id = e.dataSetID
+		) AS dataSetName,
+		(
+		SELECT
+		ti.name
+		FROM
+		t_tableinfo as ti
+		WHERE
+		ti.id = e.tableID
+		) AS dataTableName,
+		(
+		SELECT
+		df.name
+		FROM
+		e_dataflow as df
+		WHERE
+		df.id = e.dataflowID
+		) AS dataFlowName,
+		(
+		SELECT
+		dw.name
+		FROM
+		e_datawrapper as dw
+		WHERE
+		dw.id = e.dataWrapperID
+		) AS dataWrapperName,
+		publishTime
+		FROM
+		e_equipmentgroup e
+		<where>
+			<if test="orgId != 0">
+				AND (e.org_id = #{orgId} )
+				 OR (e.org_id IN 
+				 (SELECT o.org_id from sys_org o
+				 WHERE o.parent_id = #{orgId}) )
+			</if>
+		</where>
+		ORDER BY
+		e.id ASC
+	</select>
+
+	<insert id="save">
+		INSERT INTO e_equipmentgroup (
+		userID,
+		creater,
+		publishTime,
+		name,
+		description,
+		registerCode,
+		protocol,
+		saveTag,
+		dataSetID,
+		tableID,
+		msServer,
+		dataWrapperID,
+		dataflowID,
+		org_id
+		)
+		VALUES (
+		#{userID},
+		#{creater},
+		NOW(),
+		#{name},
+		#{description},
+		#{registerCode},
+		#{protocol},
+		#{saveTag},
+		#{dataSetID},
+		#{tableID},
+		#{msServer},
+		#{dataWrapperID},
+		#{dataflowID},
+		#{orgId}
+		)
+	</insert>
+
+	<select id="getObjectById" resultType="SysEquipmentGroupEntity">
+		SELECT
+		e.id,
+		e.userID,
+		e.creater,
+		e.publishTime,
+		e.name,
+		e.description,
+		e.registerCode,
+		e.protocol,
+		e.saveTag,
+		e.dataSetID,
+		e.tableID,
+		e.msServer,
+		e.dataWrapperID,
+		e.dataflowID
+		FROM
+		e_equipmentgroup e
+		WHERE
+		id = #{value}
+	</select>
+
+	<update id="update">
+		UPDATE e_equipmentgroup
+		<set>
+			<if test="userID != null">userID = #{userID}, </if>
+			<if test="creater != null">creater = #{creater}, </if>
+			<if test="publishTime != null">publishTime = #{publishTime}, </if>
+			<if test="name != null">name = #{name}, </if>
+			<if test="description != null">description = #{description}, </if>
+			<if test="registerCode != null">registerCode = #{registerCode}, </if>
+			<if test="protocol != null">protocol = #{protocol}, </if>
+			<if test="saveTag != null">saveTag = #{saveTag}, </if>
+			<if test="dataSetID != null">dataSetID = #{dataSetID}, </if>
+			<if test="dataSetID != null">tableID = #{tableID}, </if>
+			<if test="msServer != null">msServer = #{msServer}, </if>
+			<if test="dataWrapperID != null">dataWrapperID = #{dataWrapperID}, </if>
+			<if test="dataflowID != null">dataflowID = #{dataflowID}, </if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="batchRemove">
+		DELETE
+		FROM
+		e_equipmentgroup
+		WHERE
+		id IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

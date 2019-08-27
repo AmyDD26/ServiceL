@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysTableStructureMapper">
+	
+	<select id="listForPage" resultType="SysTableStructureEntity">
+		SELECT
+			`id`, 
+			`name`, 
+			`fieldType`, 
+			`defaultValue`, 
+			`chName`, 
+			`tableInfoID`, 
+			`length`, 
+			`isNull`, 
+			`isKey`, 
+			`isPartitionColumn`, 
+			`columnPosition`
+		FROM
+			t_tablestructure
+		WHERE
+			`tableInfoID`=#{tableInfoId}
+		ORDER BY
+			id ASC
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_tablestructure (
+			`name`, 
+			`fieldType`, 
+			`defaultValue`, 
+			`chName`, 
+			`tableInfoID`, 
+			`length`, 
+			`isNull`, 
+			`isKey`, 
+			`isPartitionColumn`, 
+			`columnPosition`
+		)
+		VALUES (
+			#{name}, 
+			#{fieldType}, 
+			#{defaultValue}, 
+			#{chName}, 
+			#{tableInfoId}, 
+			#{length}, 
+			#{isNull}, 
+			#{isKey}, 
+			#{isPartitionColumn}, 
+			#{columnPosition}
+		)
+	</insert>
+	
+	<!-- 为表t_tablestructure添加唯一索引，name, tableInfoID -->
+	
+	<insert id="sync">
+		INSERT IGNORE INTO t_tablestructure (
+			`name`, 
+			`fieldType`, 
+			`defaultValue`, 
+			`chName`, 
+			`tableInfoID`, 
+			`length`, 
+			`isNull`, 
+			`isKey`, 
+			`isPartitionColumn`, 
+			`columnPosition`
+		)
+		VALUES (
+			#{name}, 
+			#{fieldType}, 
+			#{defaultValue}, 
+			#{chName}, 
+			#{tableInfoId}, 
+			#{length}, 
+			#{isNull}, 
+			#{isKey}, 
+			#{isPartitionColumn}, 
+			#{columnPosition}
+		)
+	</insert>
+	
+	<select id="getObjectById" resultType="SysTableStructureEntity">
+		SELECT
+			`id`, 
+			`name`, 
+			`fieldType`, 
+			`defaultValue`, 
+			`chName`, 
+			`tableInfoID`, 
+			`length`, 
+			`isNull`, 
+			`isKey`, 
+			`isPartitionColumn`, 
+			`columnPosition`
+		FROM
+			t_tablestructure
+		WHERE
+			`id` = #{id}
+	</select>
+	
+
+	
+	<update id="update">
+		UPDATE t_tablestructure
+	 	<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="fieldType != null">`fieldType` = #{fieldType}, </if>
+			`defaultValue` = #{defaultValue},
+			`chName` = #{chName},
+			<if test="tableInfoId != null">`tableInfoID` = #{tableInfoId},</if>
+			`length` = #{length}, 
+			<if test="isNull != null">`isNull` = #{isNull}, </if>
+			`isKey` = #{isKey},
+			`isPartitionColumn` = #{isPartitionColumn},
+			`columnPosition` = #{columnPosition}
+		</set>
+		WHERE
+			`id` = #{id}
+	</update>
+
+	<delete id="batchRemove">
+		DELETE
+		FROM
+			t_tablestructure
+		WHERE
+			id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+
+	
+	<select id="getTableName" resultType="String">
+		SELECT
+			`name`
+		FROM
+			t_tableinfo
+		WHERE
+			`id`= #{tableInfoId}
+	</select>
+	
+	<select id="getTableStructurezTree" resultType="TableStructurezTreeEntity">
+		SELECT
+			`id`,
+			`dbID`,
+			`name`
+		FROM
+			t_tableinfo
+		WHERE
+			`dbID`= #{dbinfoId}
+	</select>
+	
+	<insert id="savetableinfo">
+		INSERT INTO t_tableinfo (
+			`name`, 
+			`description`, 
+			`dbID`, 
+			`publishTime`, 
+			`chName`, 
+			`keyword`, 
+			`hasPartition`, 
+			`storedataType`, 
+			`topic`
+		)
+		VALUES (
+			#{name}, 
+			#{description}, 
+			#{dbID}, 
+			#{publishTime}, 
+			#{chName}, 
+			#{keyword}, 
+			#{hasPartition}, 
+			#{storedataType}, 
+			#{topic}
+		)
+	</insert>
+	
+	<insert id="savetablerecord">
+		INSERT INTO t_tablerecord (
+			`name`, 
+			`count`, 
+			`time`, 
+			`day`, 
+			`rowkeystr`, 
+			`isRecevie`, 
+			`tableInfoID`, 
+			`sIndex`, 
+			`dbID`
+		)
+		VALUES (
+			#{name}, 
+			#{count}, 
+			#{time}, 
+			#{day}, 
+			#{rowkeystr}, 
+			#{isRecevie}, 
+			#{tableInfoID}, 
+			#{sIndex}, 
+			#{dbID}
+		)
+	</insert>
+
+
+
+	<!-- 获取所有主键名 -->
+	<select id="getAllName" resultType="String">
+		SELECT 
+			name 
+		FROM
+			t_tablestructure t
+		WHERE
+			t.isKey = 1 and t.tableInfoID = #{tableInfoId}
+	</select>  
+
+
+<!-- 
+	<insert id="saveIndexInfo">
+		INSERT INTO t_indexinfo (
+			`name`, 
+			`columName`, 
+			`type`, 
+			`tableInfoId`, 
+			`dbInfoId`, 
+			`tableName`
+		)
+		
+		VALUES (
+			#{name}, 
+			#{columName}, 
+			#{type}, 
+			#{tableInfoId}, 
+			#{dbInfoId}, 
+			#{tableName}
+		)
+		
+	</insert>
+ -->
+ 
+ 
+	<!--获取t_indexinfo的id -->
+	<select id="getTableId" resultType="String">
+		SELECT 
+			id 
+		FROM
+			t_indexinfo t
+		WHERE
+			t.tableInfoID = #{tableInfoId}
+	</select>  
+	
+	<!-- 插入或更新 -->
+	<insert id="insertOrUpdate" keyProperty="id">
+  		INSERT INTO t_indexinfo (
+  			`id`,
+			`name`, 
+			`columName`, 
+			`type`, 
+			`tableInfoId`, 
+			`dbInfoId`, 
+			`tableName`
+		)
+       VALUES
+        (
+        	#{id},
+			#{name}, 
+			#{columName}, 
+			#{type}, 
+			#{tableInfoId}, 
+			#{dbInfoId}, 
+			#{tableName}
+		)
+        ON DUPLICATE KEY UPDATE
+         	    tableInfoId = VALUES (tableInfoId),
+                name = VALUES (name),
+                columName = VALUES (columName),
+                type = VALUES (type),
+                dbInfoId = VALUES (dbInfoId), 
+                tableName = VALUES (tableName)       
+	</insert>
+
+ 	  
+	<delete id="remove_IndexInfo">
+		DELETE
+		FROM
+			t_indexinfo
+		WHERE
+			tableInfoId IN
+		<foreach item="tableInfoId" collection="array" open="(" separator="," close=")">
+			#{tableInfoId}
+		</foreach>
+	</delete>
+	
+	 
+	<delete id="removeIndexInfo">
+		DELETE
+		FROM
+			t_indexinfo
+		WHERE
+			`tableInfoId`= #{0}
+		AND
+			`columName`= #{1}
+	</delete>
+ 		 	
+			
+	<!-- 添加获取主键方法 -->
+	<select id="getKeysCount" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM
+			t_tablestructure t
+		WHERE
+			t.isKey = 1 and t.tableInfoID = #{value}
+	</select>  		
+			
+	
+	<select id="getTableInfoIdByTableName" resultType="int">
+		SELECT
+			`id`
+		FROM
+			t_tableinfo
+		WHERE
+			`name`= #{tableName}
+	</select>
+	
+	<select id="getDbInfoIdByTableName" resultType="int">
+		SELECT
+			`dbID`
+		FROM
+			t_tableinfo
+		WHERE
+			`name`= #{tableName}
+	</select>
+	
+	<select id="countByTableInfoId" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			t_tablestructure
+		WHERE
+			`tableInfoID`= #{tableInfoId}
+	</select>
+
+	<!--   赋值status  使用update -->
+	<update id="setStatusFalse">
+		UPDATE t_tablerecord t
+		<set> 
+			t.status = 1	
+		</set>
+		where t.tableInfoID=#{tableInfoId}
+	</update>  
+	
+	<update id="setStatusTrue">
+		UPDATE t_tablerecord t
+		<set> 
+			t.status = 0
+		</set>
+		where t.tableInfoID=#{tableInfoId}
+	</update>  
+
+
+</mapper>

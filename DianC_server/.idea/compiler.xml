@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="dp-base" />
+        <module name="dp-common" />
+        <module name="dp-generator" />
+        <module name="dp-orm" />
+        <module name="dp-quartz" />
+        <module name="dp-shiro" />
+        <module name="dp-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="dp-base" target="1.7" />
+      <module name="dp-common" target="1.7" />
+      <module name="dp-generator" target="1.7" />
+      <module name="dp-orm" target="1.7" />
+      <module name="dp-pro" target="1.7" />
+      <module name="dp-quartz" target="1.7" />
+      <module name="dp-shiro" target="1.7" />
+      <module name="dp-web" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>设备管理</title>
+#parse("include/header.html")
+</head>
+<body>
+<div id="dpLTE" class="container-fluid" v-cloak>
+	
+	<div class="row">
+	    <div class="col-md-2 no-padding">
+			<div class="panel panel-default">
+				<div class="panel-heading">数据目录</div>
+				<div class="panel-body" id="treePanel" style="overflow: auto;">
+					<ul id="orgTree" class="ztree"></ul>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-10 no-padding">
+		    <div class="panel panel-default">
+		        <div class="panel-heading">设备信息</div>
+		        <div class="panel-body">
+	                <div class="row">
+		                <div class="col-md-6">
+			                <div class="btn-toolbar">
+				                <div class="btn-group">
+		                            <a v-if="hasPermission('sys:equipmentgroup:list')" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+		                            <a v-if="hasPermission('sys:equipmentgroup:save')" class="btn btn-default" @click="save"><i class="fa fa-plus"></i>&nbsp;新增</a>
+		                            <a v-if="hasPermission('sys:equipmentgroup:edit')" class="btn btn-default" @click="edit"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+		                            <a v-if="hasPermission('sys:equipmentgroup:remove')" class="btn btn-default" @click="remove"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+		                            <a v-if="hasPermission('sys:wrapper:save')" class="btn btn-default" @click="saveWrapper"><i class="fa fa-plus"></i>&nbsp;添加封装器</a>
+		                        </div>
+	                        </div>
+		                </div>
+	                </div>
+	                <div class="row">
+		                <table id="dataGrid_group"></table>
+	                </div>
+	                <div class="row">
+		                <div class="col-md-6">
+			                <div class="btn-toolbar">
+				                <div class="btn-group">
+		                            <a v-if="hasPermission('sys:equipment:list')" class="btn btn-default" @click="reloadEquipment();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+		                            <a v-if="hasPermission('sys:equipment:save')" class="btn btn-default" @click="saveEquipment"><i class="fa fa-plus"></i>&nbsp;新增</a>
+		                            <a v-if="hasPermission('sys:equipment:edit')" class="btn btn-default" @click="editEquipment"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+		                            <a v-if="hasPermission('sys:equipment:remove')" class="btn btn-default" @click="removeEquipment"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+		                        </div>
+	                        </div>
+		                </div>
+	                </div>
+	            </div>
+	                <div class="row">
+		                <table id="dataGrid_equipment"></table>
+	                </div>
+             </div>
+         </div>
+     </div>
+#parse("include/footer.html")
+<script src="${rc.contextPath}/statics/js/base/equipment/list.js?_${date.systemTime}"></script>
+</body>
+</html>

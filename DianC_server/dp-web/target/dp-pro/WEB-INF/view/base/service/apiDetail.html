@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>服务详情</title>
+    #parse("include/header.html")
+</head>
+<body>
+<div id="dpLTE" class="container-fluid" v-cloak>
+    <table class="form" id="form">
+        <tr>
+            <td class="formTitle">服务提供商<font face="宋体">*</font></td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.apiProvider" placeholder="服务提供商" isvalid="yes" checkexpession="NotNull"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">API主页</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.apiPortalOrHomePage" placeholder="API主页"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">建筑风格</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.architecturalStyle" placeholder="建筑风格"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">指定设备</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.deviceSpecific" placeholder="指定设备"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">服务范围</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.scope" placeholder="服务范围"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">api描述是否专有</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.apiDesign" placeholder="api描述是否专有"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">SSL支持</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.sslSupport" placeholder="SSL支持"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">是否超媒体</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.hypermediaApi" placeholder="是否超媒体"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">权限限制</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.restrictedAccess" placeholder="权限限制"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">是否官方</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.unofficialApi" placeholder="是否官方"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">身份验证</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.authenticationModel" placeholder="身份验证"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">服务类别</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.categoryName" placeholder="服务类型"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">api端口</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.apiEndPoint" placeholder="api端口"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="formTitle">apiVersion</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.apiVersion" placeholder="apiVersion"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">文档主页</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.docsHomePageUrl" placeholder="文档主页"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">交互控制台</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.interactiveConsoleUrl" placeholder="交互控制台"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">服务条款网址</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.termsOfServiceUrl" placeholder="服务条款网址"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">描述文件类型</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.descriptionFileType" placeholder="描述文件类型"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">专利执照</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.typeOfLicenseIfNonProprietary" placeholder="专利执照"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">支持请求格式</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.supportedRequestFormats" placeholder="支持请求格式"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">支持响应格式</td>
+            <td class="formValue">
+                <input type="text" readonly = "readonly" class="form-control" v-model="service.supportedResponseFormats" placeholder="支持响应格式"/>
+            </td>
+        </tr>
+    </table>
+</div>
+#parse("include/footer.html")
+<script
+        src="${rc.contextPath}/statics/js/base/service/edit.js?_${date.systemTime}"></script>
+</body>
+</html>

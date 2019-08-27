@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysDbinfoncListlineMapper">
+	
+	<select id="listForPage" resultType="SysDbinfoncListlineEntity">
+		SELECT
+			t.name,
+			t.dbID,
+			t.chName,
+			d.description
+		FROM
+			t_tableinfo t,
+			d_dbinfo d
+		WHERE
+			t.dbID=d.id
+		ORDER BY
+			t.id ASC
+	</select>
+	<select id="listlineTbinfoTree" resultType="TableStructurezTreeEntity">
+		SELECT
+			`id`,
+			`dbID`,
+			`name`
+		FROM
+			t_tableinfo
+	</select>
+	<select id="listlineDbinfoTree" resultType="TableStructurezTreeEntity">
+		SELECT
+			`id`,
+			`chName` as name
+		FROM
+			d_dbinfo
+	</select>
+	
+	<select id="getItemByhbaseType" resultType="SysHbaseaddrEntity">
+		SELECT
+			`id`, 
+			`hbaseType`,
+			`hbaseAddress`,
+			`hbasePort`
+		FROM
+			d_hbaseaddr
+		WHERE
+			`hbaseType` = #{hbaseType}
+	</select>
+	<!-- <insert id="save">
+		INSERT INTO t_tableinfo (
+			name,
+			count
+		)
+		VALUES (
+			#{name},
+			#{count}
+		)
+	</insert>
+	
+	<select id="getObjectById" resultType="SysDbinfoncListlineEntity">
+		SELECT
+			t.name,
+			t.count
+		
+			FROM
+			t_tableinfo t
+		WHERE
+			id = #{value}
+	</select>
+	
+	<update id="update">
+		UPDATE t_tableinfo
+		<set> 
+			<if test="name != null">name = #{name}, </if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="batchRemove">
+		DELETE
+		FROM
+			t_tableinfo
+		WHERE
+			id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete> -->
+
+</mapper>

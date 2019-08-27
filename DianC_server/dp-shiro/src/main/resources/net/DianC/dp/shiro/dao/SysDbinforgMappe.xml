@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysDbinforgMapper">
+	
+	<select id="countDbinfoChildren" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			sys_org
+		WHERE
+			parent_id = (
+				SELECT
+					p.parent_id
+				FROM
+					sys_org p
+				WHERE
+					p.org_id = #{value}
+			)
+	</select>
+	
+	<select id="listAreaByParentCode" resultType="SysAreaEntity">
+		SELECT
+			o.org_id,
+			o.parent_id
+			o.code,
+			o.name,
+			o.order_num,
+			o.status,
+		<if test="name == null">
+			(
+				SELECT
+					count(*)
+				FROM
+					sys_org p
+				WHERE
+					p.parent_id = o.org_id
+			) AS size,
+		</if>
+			o.remark
+		FROM
+			sys_org o
+		<where>
+			<if test="parentId != null">
+				AND o.parent_id = #{parentId} 
+			</if>
+			<if test="name != null and name.trim() != ''">
+				AND o.name LIKE concat('%',#{name},'%') 
+			</if>
+		</where>
+		ORDER BY
+			o.order_num ASC
+	</select>
+	
+	<insert id="save">
+		INSERT INTO sys_org (
+			org_id,
+			parent_id,
+			code,
+			name,
+			status,
+			order_num,
+			gmt_create
+		)
+		VALUES (
+			#{orgId},
+			#{parentId}, 
+			#{code},
+			#{name}, 
+			#{status},
+			#{orderNum},  
+			now()
+		)
+	</insert>
+	
+	<select id="getObjectById" resultType="SysDbinfoEntity">
+		SELECT
+		    o.org_id,
+			o.parent_id
+			o.code,
+			o.name,
+			o.order_num,
+			o.status,
+			
+			(
+				SELECT
+					p. NAME
+				FROM
+					sys_org p
+				WHERE
+					p.org_id = o.parent_id
+			) AS parentName
+		FROM
+			sys_org o
+		WHERE
+			o.org_id = #{orgId}
+	</select>
+	
+	<update id="update">
+		UPDATE sys_org
+	 	<set> 
+			<if test="orgId != null">org_id = #{orgId}, </if>
+			<if test="name != null">name = #{name}, </if>
+			<if test="status != null">status = #{status}, </if>
+			<if test="orderNum != null">order_num = #{orderNum}, </if>
+			gmt_modified = NOW()
+		</set>
+		WHERE
+			org_id = #{orgId}
+	</update>
+	
+	<delete id="batchRemove">
+		DELETE
+		FROM
+			sys_org
+		WHERE
+			org_id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

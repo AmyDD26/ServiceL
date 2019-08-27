@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysDbinfoMapper">
+
+	<select id="listForPage" resultType="SysDbinfoEntity">
+		SELECT
+		di.id,
+		di.dbName,
+		di.publishTime,
+		di.description,
+		di.chName,
+		di.datasetTypeID,
+		
+		di.org_id
+
+
+		FROM
+		d_dbinfo di
+		<where>
+			<if test="orgId != 0">
+				AND (di.org_id = #{orgId} )
+				 OR (di.org_id IN 
+				 (SELECT o.org_id from sys_org o
+				 WHERE o.parent_id = #{orgId}) )
+			</if>
+		</where>
+		ORDER BY
+		di.id ASC
+	</select>
+
+	<insert id="save">
+		INSERT INTO d_dbinfo (
+		publishTime,
+		dbName,
+		chName,
+		description,
+		datasetTypeID,
+		
+		org_id
+		)
+		VALUES (
+
+		NOW(),
+		#{dbName},
+		#{chName},
+		#{description},
+		#{datasetTypeID},
+		#{orgId}
+
+		)
+	</insert>
+
+	<select id="getObjectById" resultType="SysDbinfoEntity">
+		SELECT
+		di.id,
+		di.publishTime,
+		di.dbName,
+		di.chName,
+		di.description,
+		di.datasetTypeID,
+		
+		di.org_id
+
+
+		FROM
+		d_dbinfo di
+		WHERE
+		id = #{value}
+	</select>
+	<update id="update">
+		UPDATE d_dbinfo
+		<set>
+			<if test="dbName != null">dbName = #{dbName}, </if>
+			<if test="description != null">description = #{description}, </if>
+			<if test="publishTime != null">publishTime = #{publishTime}, </if>
+			<if test="chName != null">chName = #{chName} ,</if>
+			<if test="datasetTypeID != null">datasetTypeID = #{datasetTypeID} ,</if>
+			<if test="orgId != null">org_id = #{orgId} ,</if>
+
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="batchRemove">
+		DELETE
+		FROM
+		d_dbinfo
+		WHERE
+		id IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

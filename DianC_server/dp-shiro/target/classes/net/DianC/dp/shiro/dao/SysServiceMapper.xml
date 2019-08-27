@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.DianC.dp.shiro.dao.SysServiceMapper">
+	<resultMap id="ApiResultMap" type="net.DianC.dp.shiro.entity.SysServiceEntity">
+		<id column="api_id" property="apiId" jdbcType="INTEGER" />
+		<result column="api_name" property="apiName" jdbcType="VARCHAR" />
+		<result column="api_provider" property="apiProvider" jdbcType="VARCHAR" />
+		<result column="api_portal_or_home_page" property="apiPortalOrHomePage" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="architectural_style" property="architecturalStyle" jdbcType="VARCHAR" />
+		<result column="device_specific" property="deviceSpecific" jdbcType="VARCHAR" />
+		<result column="scope" property="scope" jdbcType="VARCHAR" />
+		<result column="api_description" property="apiDescription" jdbcType="CLOB" />
+		<result column="api_design" property="apiDesign" jdbcType="VARCHAR" />
+		<result column="ssl_support" property="sslSupport" jdbcType="VARCHAR" />
+		<result column="hypermedia_api" property="hypermediaApi" jdbcType="VARCHAR" />
+		<result column="restricted_access" property="restrictedAccess" jdbcType="VARCHAR" />
+		<result column="unofficial_api" property="unofficialApi" jdbcType="VARCHAR" />
+		<result column="in_parameter" property="inParameter" jdbcType="VARCHAR" />
+		<result column="out_parameter" property="outParameter" jdbcType="VARCHAR" />
+		<result column="add_date" property="addDate" jdbcType="TIME" />
+		<result column="api_endpoint" property="apiEndPoint" jdbcType="VARCHAR" />
+		<result column="api_version" property="apiVersion" jdbcType="VARCHAR" />
+		<result column="docs_home_page_url" property="docsHomePageUrl" jdbcType="VARCHAR" />
+		<result column="interactive_console_url" property="interactiveConsoleUrl" jdbcType="VARCHAR" />
+		<result column="terms_of_service_url" property="termsOfServiceUrl" jdbcType="VARCHAR" />
+		<result column="description_file_type" property="descriptionFileType" jdbcType="VARCHAR" />
+		<result column="type_of_license_if_non_proprietary" property="typeOfLicenseIfNonProprietary" jdbcType="VARCHAR" />
+
+		<collection property="authenticationModel" ofType="java.lang.String" javaType="java.util.List">
+			<result column="authentication_model"/>
+		</collection>
+
+		<collection property="categoryName" ofType="java.lang.String" javaType="java.util.List">
+			<result column="category_name"/>
+		</collection>
+
+		<collection property="supportedRequestFormats" ofType="java.lang.String" javaType="java.util.List">
+			<result column="supported_request_formats"/>
+		</collection>
+
+		<collection property="supportedResponseFormats" ofType="java.lang.String" javaType="java.util.List">
+			<result column="supported_response_formats"/>
+		</collection>
+
+	</resultMap>
+
+	<select id="listForPage"  resultType="net.DianC.dp.shiro.entity.SysServiceEntity">
+		SELECT
+		s.api_id,
+		s.api_name,
+		s.in_parameter,
+		s.out_parameter,
+		s.type,
+		s.api_description,
+		s.add_date
+		FROM
+		api_requirement s
+		<where>
+			<if test="serviceType != null and serviceType !='' ">
+				s.type LIKE '%${serviceType}%'
+			</if>
+			<if test="kw != null and kw !='' ">
+		  	and	s.api_name LIKE '%${kw}%'
+			</if>
+		</where>
+		ORDER BY
+		s.api_id ASC
+	</select>
+
+	<insert id="save"  parameterType="net.DianC.dp.shiro.entity.SysServiceEntity" useGeneratedKeys="true" keyProperty="apiId"  >
+		INSERT  INTO api_requirement (
+		 	pweb_id,
+			api_name,
+			in_parameter,
+			out_parameter,
+			type,
+			api_description,
+			api_provider,
+			api_portal_or_home_page,
+			architectural_style,
+			device_specific,
+			scope,
+			api_design,
+			ssl_support,
+			hypermedia_api,
+			restricted_access,
+			unofficial_api,
+			add_date,
+			update_date
+		)
+		VALUES (
+			#{pWebId,jdbcType=INTEGER},
+			#{apiName},
+			#{inParameter},
+			#{outParameter},
+			#{type},
+			#{apiDescription},
+			#{apiProvider},
+			#{apiPortalOrHomePage},
+			#{architecturalStyle},
+			#{deviceSpecific},
+			#{scope},
+			#{apiDesign},
+			#{sslSupport},
+			#{hypermediaApi},
+			#{restrictedAccess},
+			#{unofficialApi},
+			NOW(),
+			NOW()
+		) ;
+
+		INSERT INTO api_option (
+			pweb_id,
+			api_endpoint,
+			api_version,
+			docs_home_page_url,
+			interactive_console_url,
+			terms_of_service_url,
+			description_file_type,
+			type_of_license_if_non_proprietary
+		)
+		VALUES (
+		    #{pWebId,jdbcType=INTEGER},
+			#{apiEndPoint},
+			#{apiVersion},
+			#{docsHomePageUrl},
+			#{interactiveConsoleUrl},
+			#{termsOfServiceUrl},
+			#{descriptionFileType},
+			#{typeOfLicenseIfNonProprietary}
+		);
+
+
+		<foreach collection="authenticationModel" item="item" index="index" separator=",">
+            insert into api_authentication_model(api_id,pweb_id,authentication_model)
+            values((SELECT api_id FROM  api_requirement  WHERE ( add_date = ( SELECT MAX(add_date) FROM api_requirement))LIMIT 1),
+            #{pWebId,jdbcType=INTEGER},#{item})
+		</foreach>;
+
+		insert into api_category(api_id,pweb_id,category_name,category_type)
+		values((SELECT api_id FROM  api_requirement  WHERE ( add_date = ( SELECT MAX(add_date) FROM api_requirement))LIMIT 1),
+		#{pWebId,jdbcType=INTEGER},
+		<foreach collection="categoryName" item="item" index="index" separator=",">
+		   #{item}
+		</foreach>,2
+	    );
+
+		insert into api_supported_request_formats(api_id,pweb_id,supported_request_formats)
+		values((SELECT api_id FROM  api_requirement  WHERE ( add_date = ( SELECT MAX(add_date) FROM api_requirement))LIMIT 1),
+		#{pWebId,jdbcType=INTEGER},
+		<foreach collection="supportedRequestFormats" item="item" index="index" separator=",">
+		   #{item}
+		</foreach>
+		);
+
+		insert into api_supported_response_formats(api_id,pweb_id,supported_response_formats)
+		values((SELECT api_id FROM  api_requirement  WHERE ( add_date = ( SELECT MAX(add_date) FROM api_requirement))LIMIT 1),
+		#{pWebId,jdbcType=INTEGER},
+		<foreach collection="supportedResponseFormats" item="item" index="index" separator=",">
+		   #{item}
+		</foreach>
+		)
+
+
+	</insert>
+
+    <!--此处由resultType 换成 resultMap -->
+    <select id="getObjectById" resultMap="ApiResultMap">
+        SELECT
+             a.api_id,
+			 a.api_name ,
+			 a.api_provider,
+			 a.api_portal_or_home_page,
+			 a.type,
+			 a.architectural_style,
+			 a.device_specific,
+			 a.scope,
+			 a.api_description,
+			 a.api_design,
+			 a.ssl_support,
+			 a.hypermedia_api,
+			 a.restricted_access,
+			 a.unofficial_api,
+			 a.in_parameter,
+			 a.out_parameter,
+			 a.add_date,
+			 b.api_endpoint,
+			 b.api_version,
+			 b.docs_home_page_url,
+			 b.interactive_console_url,
+			 b.terms_of_service_url,
+			 b.description_file_type,
+			 b.type_of_license_if_non_proprietary,
+			 c.authentication_model,
+			 d.category_name,
+			 e.supported_request_formats,
+			 f.supported_response_formats
+
+    	FROM api_requirement a
+		LEFT JOIN api_option b on a.api_id=b.api_id
+		LEFT JOIN api_authentication_model c on b.api_id = c.api_id
+    	LEFT JOIN api_category d on c.api_id = d.api_id
+    	LEFT JOIN api_supported_request_formats e on d.api_id = e.api_id
+   		LEFT JOIN api_supported_response_formats f on e.api_id = f.api_id
+    	WHERE a.api_id=#{apiId,jdbcType = BIGINT}
+	</select>
+
+
+	<update id="update" parameterType="net.DianC.dp.shiro.entity.SysServiceEntity" >
+
+		UPDATE api_requirement
+		<set>
+			<if test="apiName != null">api_name = #{apiName}, </if>
+			<if test="inParameter != null">in_parameter = #{inParameter}, </if>
+			<if test="outParameter != null">out_parameter = #{outParameter}, </if>
+			<if test="type != null">type = #{type}, </if>
+			<if test="apiDescription != null">api_description = #{apiDescription}, </if>
+			<if test="addDate != null">add_date = #{addDate}, </if>
+			<if test="apiProvider != null">api_provider = #{apiProvider} ,</if>
+			<if test="apiPortalOrHomePage != null">api_portal_or_home_page = #{apiPortalOrHomePage}, </if>
+			<if test="architecturalStyle != null">architectural_style = #{architecturalStyle}, </if>
+			<if test="deviceSpecific != null">device_specific = #{deviceSpecific}, </if>
+			<if test="scope != null">scope = #{scope}, </if>
+			<if test="apiDesign != null">api_design = #{apiDesign}, </if>
+			<if test="sslSupport != null">ssl_support = #{sslSupport}, </if>
+			<if test="hypermediaApi != null">hypermedia_api = #{hypermediaApi}, </if>
+			<if test="restrictedAccess != null">restricted_access = #{restrictedAccess}, </if>
+			<if test="unofficialApi != null">unofficial_api = #{unofficialApi},</if>
+			update_date = NOW()
+		</set>
+		where api_id = #{apiId};
+
+		UPDATE api_option
+		<set>
+			<if test="apiEndPoint != null">api_endpoint = #{apiEndPoint}, </if>
+			<if test="apiVersion != null">api_version = #{apiVersion}, </if>
+			<if test="docsHomePageUrl != null">docs_home_page_url = #{docsHomePageUrl}, </if>
+			<if test="interactiveConsoleUrl != null">interactive_console_url = #{interactiveConsoleUrl}, </if>
+			<if test="termsOfServiceUrl != null">terms_of_service_url = #{termsOfServiceUrl}, </if>
+			<if test="descriptionFileType != null">description_file_type = #{descriptionFileType}, </if>
+			<if test="typeOfLicenseIfNonProprietary != null">type_of_license_if_non_proprietary = #{typeOfLicenseIfNonProprietary}</if>
+		</set>
+		where api_id = #{apiId};
+
+		<foreach collection="authenticationModel" item="item" index="index" separator=",">
+	   		UPDATE api_authentication_model
+			 	<set>
+					authentication_model = #{item}
+				</set>
+			WHERE api_id = #{apiId}
+		</foreach> ;
+
+
+		<foreach collection="categoryName" item="item" index="index" separator=",">
+			UPDATE api_category
+				<set>
+				<if test="item != null">
+					category_name = #{item}
+				</if>
+				</set>
+			WHERE api_id = #{apiId}
+		</foreach>;
+
+
+		<foreach collection="supportedRequestFormats" item="item" index="index" separator=",">
+			UPDATE api_supported_request_formats
+				<set>
+					<if test="item != null">
+					supported_request_formats = #{item}
+					</if>
+				</set>
+			WHERE api_id = #{apiId}
+		</foreach>;
+
+
+		<foreach collection="supportedResponseFormats" item="item" index="index" separator=",">
+			UPDATE api_supported_response_formats
+				<set>
+					<if test="item != null">
+					supported_response_formats = #{item}
+					</if>
+				</set>
+			WHERE api_id = #{apiId}
+		</foreach>;
+
+	</update>
+
+	<delete id="batchRemove">
+		DELETE
+		FROM
+			api_requirement
+		WHERE
+			api_id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>;
+		DELETE
+		FROM
+			api_option
+		WHERE
+			api_id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>;
+		DELETE
+		FROM
+		api_authentication_model
+		WHERE
+		api_id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>;
+
+		DELETE
+		FROM
+		api_category
+		WHERE
+		api_id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>;
+
+		DELETE
+		FROM
+		api_supported_request_formats
+		WHERE
+		api_id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>;
+
+		DELETE
+		FROM
+		api_supported_response_formats
+		WHERE
+		api_id IN
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>;
+
+	</delete>
+
+
+	<!--  zhy -->
+	<select id="serviceTypeAll" resultType="java.lang.String">
+		SELECT DISTINCT(type) from api_requirement
+	</select>
+</mapper>

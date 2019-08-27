@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>数据内容</title>
+#parse("include/header.html")
+</head>
+<body>
+<div id="dpLTE" class="container-fluid" v-cloak>
+	<div class="row">	
+		<div class="col-md-2 no-padding">
+			<div class="panel panel-default">
+				<div class="panel-heading">数据目录</div>
+				<div class="panel-body" id="treePanel" style="overflow: auto;">
+					<ul id="orgTree" class="ztree"></ul>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-10 no-padding">
+			<div class="panel panel-default">
+			<div class="panel-heading">数据查询信息</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="input-group input-group-lg">
+						<input id="queryText" type="text" class="form-control">
+							<span class="input-group-btn">
+								<button class="btn btn-default" onclick="query();" type="button">查询</button>
+							</span>
+						</div><!-- /input-group -->
+					</div><!-- /.row -->
+					<div class="row">
+						<table id="dataGrid"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+#parse("include/footer.html")
+<script src="${rc.contextPath}/statics/js/base/dbinfonclistline/list.js?_${date.systemTime}"></script>
+</body>
+</html>
